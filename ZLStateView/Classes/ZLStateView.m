@@ -133,6 +133,10 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 }
 @end
 
+@interface NSObject ()
+@property (nonatomic, strong) ZLStateView *zl_stateView;
+@end
+
 @implementation NSObject (ZLStateView)
 - (ZLStateView *)zl_stateView {
     return objc_getAssociatedObject(self, @selector(zl_stateView));
@@ -169,8 +173,14 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             [self.zl_stateViewdelegate zl_initializeStateView:stateView];
         }
     }
+   
     ZLStateView *stateView = self.zl_stateView;
     stateView.zl_stateViewStatus = self.zl_stateViewStatus;
+    
+    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_updateStateView:)]) {
+        [self.zl_stateViewdelegate zl_updateStateView:stateView];
+    }
+    
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_superViewForStateView:)]) {
         superview = [self.zl_stateViewdelegate zl_superViewForStateView:stateView];
     }
@@ -223,6 +233,12 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     [self zl_addDetailLabel:stateView];
     [self zl_addButton:stateView];
     [self zl_sortStackViewSubviews:stateView];
+    
+    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_insetsForStateView:)]) {
+        stateView.stackView.layoutMargins = [self.zl_stateViewdelegate zl_insetsForStateView:stateView];
+        stateView.stackView.layoutMarginsRelativeArrangement = YES;
+    }
+        
 }
 - (void)zl_sortStackViewSubviews:(ZLStateView *)stateView {
     NSArray *arrangedSubviews = stateView.stackView.arrangedSubviews;

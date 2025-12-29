@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol IZLStateViewDelegate <NSObject>
 @optional
+
+
+- (void)zl_updateStateView:(ZLStateView *)stateView;
+
 - (BOOL )zl_titleLabelShouldDisplayInStateView:(ZLStateView *)stateView;
 - (BOOL )zl_detailLabelShouldDisplayInStateView:(ZLStateView *)stateView;
 - (BOOL )zl_imageViewShouldDisplayInStateView:(ZLStateView *)stateView;
@@ -66,7 +70,6 @@ FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
 
 @interface NSObject (ZLStateView)
 @property (nonatomic, weak, nullable) id<IZLStateViewDelegate> zl_stateViewdelegate;
-@property (nonatomic, strong) ZLStateView *zl_stateView;
 @property (nonatomic, copy, nullable) ZLStateViewStatus zl_stateViewStatus;
 - (void)zl_reloadStateView;
 @end
