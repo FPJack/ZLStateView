@@ -1,0 +1,31 @@
+PODS:
+  - DZNEmptyDataSet (1.8.1)
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - ZLStateView (0.1.0)
+
+DEPENDENCIES:
+  - DZNEmptyDataSet
+  - FBSnapshotTestCase
+  - ZLStateView (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - DZNEmptyDataSet
+    - FBSnapshotTestCase
+
+EXTERNAL SOURCES:
+  ZLStateView:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  ZLStateView: beb999afe2d6532555b237355351205382684e6c
+
+PODFILE CHECKSUM: 8b239e4be18a463c4dec7cde00d9663ae483ae0f
+
+COCOAPODS: 1.16.2

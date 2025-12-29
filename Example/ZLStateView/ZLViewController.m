@@ -7,9 +7,10 @@
 //
 
 #import "ZLViewController.h"
-
-@interface ZLViewController ()
-
+#import <ZLStateView/ZLStateView.h>
+@interface ZLViewController ()<IZLStateViewDelegate,UITableViewDataSource,UITableViewDelegate>
+@property (nonatomic, assign)BOOL display;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @end
 
 @implementation ZLViewController
@@ -17,13 +18,74 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
+    self.zl_stateViewdelegate = self;
+    self.display = YES;
+    [self zl_reloadStateView];
+//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//        self.display = YES;
+//        [self zl_reloadStateView];
+//    });
 }
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (BOOL)zl_stateViewShouldDisplay {
+    return self.display;
 }
-
+- (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView {
+    imageView.image = [UIImage imageNamed:@"emptyView"];
+}
+//- (CGFloat)zl_spacingAfterImageViewInStateView:(ZLStateView *)stateView {
+//    return 30;
+//}
+- (void)zl_configureTitleLabel:(UILabel *)titleLabel inStateView:(ZLStateView *)stateView {
+    titleLabel.text = @"No Data Available";
+}
+//- (CGFloat)zl_spacingAfterTitleLabelInStateView:(ZLStateView *)stateView {
+//    return 50;
+//}
+- (void)zl_initializeButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
+    [button.widthAnchor constraintEqualToConstant:100].active = YES;
+}
+- (BOOL)zl_detailLabelShouldDisplayInStateView:(ZLStateView *)stateView {
+    return self.display;
+}
+//- (CGFloat)zl_spacingAfterDetailLabelInStateView:(ZLStateView *)stateView {
+//    return 70;
+//}
+- (BOOL)zl_buttonShouldDisplayInStateView:(ZLStateView *)stateView {
+    return self.display;
+}
+- (void)zl_configureDetailLabel:(UILabel *)detailLabel inStateView:(ZLStateView *)stateView {
+    detailLabel.text = @"Please check back later.";
+}
+- (void)zl_configureButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
+    [button setTitle:@"Retry" forState:UIControlStateNormal];
+}
+//- (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView {
+//    return 100;
+//}
+//- (CGRect)zl_frameForStateView:(ZLStateView *)stateView {
+//    return CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height - 100);
+//}
+- (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button {
+    NSLog(@"Retry button tapped");
+    stateView.imageView.tag = 11;
+    stateView.titleLabel.tag = 10;
+    [self zl_reloadStateView];
+}
+- (UIView *)zl_superViewForStateView:(ZLStateView *)stateView {
+    return self.tableView;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 50;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"Row %ld", (long)indexPath.row];
+    return cell;
+}
 @end

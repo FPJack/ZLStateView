@@ -1,0 +1,6 @@
+framework module ZLStateView {
+  umbrella header "ZLStateView-umbrella.h"
+
+  export *
+  module * { export * }
+}

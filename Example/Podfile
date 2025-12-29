@@ -4,7 +4,7 @@ platform :ios, '10.0'
 
 target 'ZLStateView_Example' do
   pod 'ZLStateView', :path => '../'
-
+  pod 'DZNEmptyDataSet'
   target 'ZLStateView_Tests' do
     inherit! :search_paths
 
