@@ -33,7 +33,7 @@
     return self.display;
 }
 - (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView {
-    imageView.image = [UIImage imageNamed:@"emptyView"];
+    imageView.image = [UIImage imageNamed:@"placeholder_appstore"];
 }
 //- (CGFloat)zl_spacingAfterImageViewInStateView:(ZLStateView *)stateView {
 //    return 30;
@@ -79,7 +79,7 @@
     return self.tableView;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 50;
+    return 0;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];

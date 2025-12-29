@@ -51,6 +51,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.font = [UIFont systemFontOfSize:16];
         _titleLabel.textColor = [UIColor darkTextColor];
+        _titleLabel.numberOfLines = 0;
         _titleLabel.tag = 11;
     }
     return _titleLabel;
@@ -192,8 +193,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_superViewForStateView:)]) {
         superview = [self.zl_stateViewdelegate zl_superViewForStateView:stateView];
-    }
-    if (!superview) {
+    }else {
         if ([self isKindOfClass:UIView.class]) {
             superview = (UIView *)self;
         }else if ([self isKindOfClass:UIViewController.class]) {
