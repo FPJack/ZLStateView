@@ -26,6 +26,8 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 
 @property (nonatomic,strong)NSLayoutConstraint *stackcviewCenterYConstraint;
 
+@property (nonatomic,assign)NSInteger numberOfSections;
+
 
 @end
 @implementation ZLStateView
@@ -148,6 +150,33 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 @end
 
 @implementation NSObject (ZLStateView)
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self _zl_hook_swizzleInstanceMethod:@selector(numberOfSectionsInTableView:) with:@selector(zl_hook_numberOfSectionsInTableView:)];
+    });
+}
++ (BOOL)_zl_hook_swizzleInstanceMethod:(SEL)originalSel with:(SEL)newSel {
+    Method originalMethod = class_getInstanceMethod(self, originalSel);
+    Method newMethod = class_getInstanceMethod(self, newSel);
+    if (!originalMethod || !newMethod) return NO;
+    class_addMethod(self,
+                    originalSel,
+                    class_getMethodImplementation(self, originalSel),
+                    method_getTypeEncoding(originalMethod));
+    class_addMethod(self,
+                    newSel,
+                    class_getMethodImplementation(self, newSel),
+                    method_getTypeEncoding(newMethod));
+    
+    method_exchangeImplementations(class_getInstanceMethod(self, originalSel),
+                                   class_getInstanceMethod(self, newSel));
+    return YES;
+}
+- (NSInteger)zl_hook_numberOfSectionsInTableView:(UITableView *)tableView {
+    return [self zl_hook_numberOfSectionsInTableView:tableView];
+}
+
 - (ZLStateView *)zl_stateView {
     return objc_getAssociatedObject(self, @selector(zl_stateView));
 }
@@ -290,8 +319,14 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 
 - (BOOL)zl_zl_stateViewShouldDisplay {
     BOOL display = YES;
-    if (self.zl_stateViewdelegate && [self.zl_stateViewdelegate respondsToSelector:@selector(zl_stateViewShouldDisplay)]) {
-        display = [self.zl_stateViewdelegate zl_stateViewShouldDisplay];
+    if (self.zl_stateViewdelegate) {
+        if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_stateViewShouldDisplay)]) {
+            display = [self.zl_stateViewdelegate zl_stateViewShouldDisplay];
+        }else {
+            if ([self isKindOfClass:UITableView.class] || [self isKindOfClass:UICollectionView.class]) {
+                display = self.zl_stateView.numberOfSections <= 0;
+            }
+        }
     }
     return display;
 }
@@ -418,6 +453,47 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 - (void)zl_didTapButton:(UIButton *)button {
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_stateView:didTapButton:)]) {
         [self.zl_stateViewdelegate zl_stateView:self.zl_stateView didTapButton:button];
+    }
+}
+@end
+
+
+@implementation UITableView(ZLStateView)
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self _zl_hook_swizzleInstanceMethod:@selector(reloadData) with:@selector(zl_hook_reloadData)];
+        [self _zl_hook_swizzleInstanceMethod:@selector(endUpdates) with:@selector(zl_hook_endUpdates)];
+
+    });
+}
+- (void)zl_hook_reloadData{
+    
+    [self zl_hook_reloadData];
+    if (self.zl_stateViewdelegate) {
+        self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInTableView:self];
+        [self zl_reloadStateView];
+        self.zl_stateView.numberOfSections = 0;
+    }
+}
+- (void)zl_hook_endUpdates{
+    [self zl_hook_endUpdates];
+}
+@end
+@implementation UICollectionView (ZLStateView)
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [self _zl_hook_swizzleInstanceMethod:@selector(reloadData) with:@selector(zl_hook_reloadData)];
+    });
+}
+- (void)zl_hook_reloadData{
+    
+    [self zl_hook_reloadData];
+    if (self.zl_stateViewdelegate) {
+        self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInCollectionView:self];
+        [self zl_reloadStateView];
+        self.zl_stateView.numberOfSections = 0;
     }
 }
 @end

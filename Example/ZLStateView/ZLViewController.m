@@ -11,6 +11,7 @@
 @interface ZLViewController ()<IZLStateViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, assign)BOOL display;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic,assign)NSInteger sections;
 @end
 
 @implementation ZLViewController
@@ -21,17 +22,22 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
-    self.zl_stateViewdelegate = self;
+    self.tableView.zl_stateViewdelegate = self;
     self.display = YES;
-    [self zl_reloadStateView];
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        self.display = YES;
-//        [self zl_reloadStateView];
-//    });
+    
+    [self.tableView zl_reloadStateView];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.sections = 10;
+        [self.tableView reloadData];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.sections = 0;
+            [self.tableView  reloadData];
+        });
+    });
 }
-- (BOOL)zl_stateViewShouldDisplay {
-    return self.display;
-}
+//- (BOOL)zl_stateViewShouldDisplay {
+//    return self.display ;
+//}
 - (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView {
     imageView.image = [UIImage imageNamed:@"placeholder_appstore"];
 }
@@ -73,13 +79,13 @@
     NSLog(@"Retry button tapped");
     stateView.imageView.tag = 11;
     stateView.titleLabel.tag = 10;
-    [self zl_reloadStateView];
+    [self.tableView zl_reloadStateView];
 }
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView {
     return self.tableView;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.sections;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
@@ -89,5 +95,7 @@
     cell.textLabel.text = [NSString stringWithFormat:@"Row %ld", (long)indexPath.row];
     return cell;
 }
-
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sections;
+}
 @end
