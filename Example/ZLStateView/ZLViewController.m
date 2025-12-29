@@ -68,6 +68,7 @@
 //- (CGRect)zl_frameForStateView:(ZLStateView *)stateView {
 //    return CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height - 100);
 //}
+
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button {
     NSLog(@"Retry button tapped");
     stateView.imageView.tag = 11;
@@ -88,4 +89,5 @@
     cell.textLabel.text = [NSString stringWithFormat:@"Row %ld", (long)indexPath.row];
     return cell;
 }
+
 @end

@@ -52,7 +52,6 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         _titleLabel.font = [UIFont systemFontOfSize:16];
         _titleLabel.textColor = [UIColor darkTextColor];
         _titleLabel.tag = 11;
-
     }
     return _titleLabel;
 }
@@ -238,8 +237,14 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         }
     }
     
-    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_addCustomView:)]) {
+    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_customViewForStateView:)]) {
         [self zl_addCustomView:stateView];
+        [stateView.stackView.arrangedSubviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![obj isEqual:stateView.customView]) {
+                [stateView.stackView removeArrangedSubview:obj];
+                [obj removeFromSuperview];
+            }
+        }];
     }else {
         if (stateView.customView) {
             [stateView.stackView removeArrangedSubview:stateView.stackView];
