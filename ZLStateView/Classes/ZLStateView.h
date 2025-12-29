@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 
-- (void)zl_updateStateView:(ZLStateView *)stateView;
+- (void)zl_reloadStateView:(ZLStateView *)stateView;
 
 - (BOOL )zl_titleLabelShouldDisplayInStateView:(ZLStateView *)stateView;
 - (BOOL )zl_detailLabelShouldDisplayInStateView:(ZLStateView *)stateView;
@@ -40,10 +40,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)zl_spacingAfterButtonInStateView:(ZLStateView *)stateView;
 
 - (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView;
-- (UIView *)zl_customViewInStateView:(ZLStateView *)stateView;
+
+- (UIView *)zl_customViewForStateView:(ZLStateView *)stateView;
 
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView;
+
 - (CGRect)zl_frameForStateView:(ZLStateView *)stateView;
+
 - (UIEdgeInsets)zl_insetsForStateView:(ZLStateView *)stateView;
 
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button;
@@ -64,6 +67,7 @@ FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
 @property (nonatomic, strong, nullable,readonly) UIImageView *imageView;
 @property (nonatomic, strong, nullable,readonly) UIButton *button;
 @property (nonatomic, strong, nullable,readonly) UIView *customView;
+///default is ZLStateViewStatusNoData
 @property (nonatomic, copy) ZLStateViewStatus status;
 @end
 
