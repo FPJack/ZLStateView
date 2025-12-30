@@ -26,7 +26,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
-    self.tableView.zl_stateViewdelegate = self;
+    self.tableView.zl_stateViewDelegate = self;
 //    self.tableView.headerCanRefresh = YES;
 //    self.tableView.refreshBlock = ^(RefreshType type) {
 //        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

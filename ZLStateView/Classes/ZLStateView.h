@@ -95,7 +95,7 @@ FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
 
 @interface NSObject (ZLStateView)
 /// State view delegate
-@property (nonatomic, weak, nullable) id<IZLStateViewDelegate> zl_stateViewdelegate;
+@property (nonatomic, weak, nullable) id<IZLStateViewDelegate> zl_stateViewDelegate;
 ///  Current state view status
 @property (nonatomic, copy, nullable) ZLStateViewStatus zl_stateViewStatus;
 /// Reload state view
