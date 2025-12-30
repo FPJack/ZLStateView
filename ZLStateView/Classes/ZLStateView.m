@@ -257,7 +257,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         return;
     }
     
-    if (!stateView.superview) {
+    if (!stateView.superview && superview) {
         void(^animationBK)(void) = ^(void) {
             stateView.alpha = 0.0;
             [UIView animateWithDuration:0.25 animations:^{
