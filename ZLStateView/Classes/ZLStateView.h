@@ -83,7 +83,7 @@ FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
 @property (nonatomic, strong, nullable,readonly) UILabel *titleLabel; ///tag 11
 @property (nonatomic, strong, nullable,readonly) UILabel *detailLabel; ///tag 12
 @property (nonatomic, strong, nullable,readonly) UIButton *button; ///tag 13
-///
+
 @property (nonatomic, strong, nullable,readonly) UIView *customView;
 ///default is ZLStateViewStatusNoData
 @property (nonatomic, copy,readonly) ZLStateViewStatus status;

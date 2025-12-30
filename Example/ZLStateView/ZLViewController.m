@@ -125,7 +125,7 @@
     }else if ([stateView.status isEqualToString:ZLStateViewStatusError]) {
         imageName = @"placeholder_dropbox";
     }else if ([stateView.status isEqualToString:ZLStateViewStatusNoData]) {
-        imageName = @"placeholder_appstore";
+        imageName = @"emptyView";
     }
     imageView.image = [UIImage imageNamed:imageName];
 }
