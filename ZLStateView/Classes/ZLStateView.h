@@ -51,6 +51,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// Vertical offset of the entire state view
 - (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView;
 
+/// Use custom view
+- (BOOL)zl_useCustomViewInStateView:(ZLStateView *)stateView;
 /// Custom view
 - (UIView *)zl_customViewForStateView:(ZLStateView *)stateView;
 
@@ -63,7 +65,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIEdgeInsets)zl_insetsForStateView:(ZLStateView *)stateView;
 /// Button tap action
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button;
-
+///如果是scrollview是否可以允许滑动
+- (BOOL)zl_stateViewScrollEnabled:(ZLStateView *)stateView;
 @end
 
 

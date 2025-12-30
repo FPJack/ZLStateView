@@ -203,12 +203,12 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     objc_setAssociatedObject(self, @selector(zl_stateViewStatus), zl_stateViewStatus, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 - (void)zl_reloadStateView {
-    if (self.zl_stateViewdelegate == nil) {
+    if (self.zl_stateViewdelegate == nil || ![self zl_zl_stateViewShouldDisplay]) {
         [self.zl_stateView removeFromSuperview];
-        return;
-    }
-    if ([self zl_zl_stateViewShouldDisplay] == NO) {
-        [self.zl_stateView removeFromSuperview];
+        if ([self isKindOfClass:UIScrollView.class]) {
+            UIScrollView *scrollView = (UIScrollView *)self;
+            scrollView.scrollEnabled = YES;
+        }
         return;
     }
     
@@ -222,7 +222,6 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     }
    
     ZLStateView *stateView = self.zl_stateView;
-//    stateView.status = self.zl_stateViewStatus;
     
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_reloadStateView:)]) {
         [self.zl_stateViewdelegate zl_reloadStateView:stateView];
@@ -237,6 +236,14 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             superview = ((UIViewController *)self).view;
         }
     }
+    
+    if ([self isKindOfClass:UIScrollView.class]) {
+        UIScrollView *scrollView = (UIScrollView *)self;
+        if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_stateViewScrollEnabled:)]) {
+            scrollView.scrollEnabled = [self.zl_stateViewdelegate zl_stateViewScrollEnabled:stateView];
+        }
+    }
+    
     if (!superview) {
         [self.zl_stateView removeFromSuperview];
         return;
@@ -274,8 +281,11 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         }
     }
     
-    
-    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_customViewForStateView:)]) {
+    BOOL useCustomView = NO;
+    if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_useCustomViewInStateView:)]) {
+         useCustomView = [self.zl_stateViewdelegate zl_useCustomViewInStateView:stateView];
+    }
+    if (useCustomView) {
         [self zl_addCustomView:stateView];
         [stateView.stackView.arrangedSubviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![obj isEqual:stateView.customView]) {
@@ -285,7 +295,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         }];
     }else {
         if (stateView.customView) {
-            [stateView.stackView removeArrangedSubview:stateView.stackView];
+            [stateView.stackView removeArrangedSubview:stateView.customView];
             [stateView.customView removeFromSuperview];
         }
         [self zl_addImageView:stateView];
@@ -294,6 +304,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         [self zl_addButton:stateView];
         [self zl_sortStackViewSubviews:stateView];
     }
+
     
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_insetsForStateView:)]) {
         stateView.stackView.layoutMargins = [self.zl_stateViewdelegate zl_insetsForStateView:stateView];
@@ -327,7 +338,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 }
 
 - (BOOL)zl_zl_stateViewShouldDisplay {
-    BOOL display = YES;
+    BOOL display = NO;
     if (self.zl_stateViewdelegate) {
         if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_stateViewShouldDisplay)]) {
             display = [self.zl_stateViewdelegate zl_stateViewShouldDisplay];
@@ -349,6 +360,9 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             }
         }
     }
+    if (!stateView.customView.superview) {
+        [stateView.stackView addArrangedSubview:stateView.customView];
+    }
 }
 - (void)zl_addImageView:(ZLStateView *)stateView {
     BOOL display = YES;
@@ -361,6 +375,8 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_initializeImageView:inStateView:)]) {
                 [self.zl_stateViewdelegate zl_initializeImageView:stateView.imageView inStateView:stateView];
             }
+        }
+        if (stateView.imageView.superview == nil) {
             [stateView.stackView addArrangedSubview:stateView.imageView];
         }
         if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_configureImageView:inStateView:)]) {
@@ -388,7 +404,10 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_initializeTitleLabel:inStateView:)]) {
                 [self.zl_stateViewdelegate zl_initializeTitleLabel:stateView.titleLabel inStateView:stateView];
             }
+        }
+        if (stateView.titleLabel.superview == nil) {
             [stateView.stackView addArrangedSubview:stateView.titleLabel];
+
         }
         if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_configureTitleLabel:inStateView:)]) {
             [self.zl_stateViewdelegate zl_configureTitleLabel:stateView.titleLabel inStateView:stateView];
@@ -415,6 +434,8 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_initializeDetailLabel:inStateView:)]) {
                 [self.zl_stateViewdelegate zl_initializeDetailLabel:stateView.detailLabel inStateView:stateView];
             }
+        }
+        if (stateView.detailLabel.superview == nil) {
             [stateView.stackView addArrangedSubview:stateView.detailLabel];
         }
         if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_configureDetailLabel:inStateView:)]) {
@@ -442,8 +463,10 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_initializeButton:inStateView:)]) {
                 [self.zl_stateViewdelegate zl_initializeButton:stateView.button inStateView:stateView];
             }
-            [stateView.stackView addArrangedSubview:stateView.button];
             [stateView.button addTarget:self action:@selector(zl_didTapButton:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        if (stateView.button.superview == nil) {
+            [stateView.stackView addArrangedSubview:stateView.button];
         }
         if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_configureButton:inStateView:)]) {
             [self.zl_stateViewdelegate zl_configureButton:stateView.button inStateView:stateView];

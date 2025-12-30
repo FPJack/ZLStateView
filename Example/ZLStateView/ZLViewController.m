@@ -14,6 +14,7 @@
 @property (nonatomic,assign)NSInteger sections;
 @property (nonatomic,assign)CGFloat verticalOffset;
 @property (nonatomic, strong) NSMutableArray *sortTags;
+@property (nonatomic, assign)BOOL useCustomView;
 @end
 
 @implementation ZLViewController
@@ -25,16 +26,7 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
     self.tableView.zl_stateViewdelegate = self;
-    
-    [self.tableView zl_reloadStateView];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.sections = 10;
-        [self.tableView reloadData];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.sections = 0;
-            [self.tableView  reloadData];
-        });
-    });
+      
     ///导航栏添加右侧按钮
     ///
     UIButton *btn = UIButton.new;
@@ -43,7 +35,14 @@
     [btn addTarget:self action:@selector(toggleDisplay:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
-    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.sections = 10;
+        [self.tableView reloadData];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.sections = 0;
+            [self.tableView reloadData];
+        });
+    });
   
 }
 - (void)toggleDisplay:(UIButton *)sender {
@@ -94,6 +93,18 @@
                 }];
                 self.sortTags = [NSMutableArray arrayWithArray:shuffledArray];
                
+                [self.tableView zl_reloadStateView];
+            });
+        })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"显示自定义view").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.useCustomView = YES;
+                [self.tableView zl_reloadStateView];
+            });
+        })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"恢复默认view").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.useCustomView = NO;
                 [self.tableView zl_reloadStateView];
             });
         })
@@ -185,9 +196,6 @@
 - (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView {
     return self.verticalOffset;
 }
-//- (CGRect)zl_frameForStateView:(ZLStateView *)stateView {
-//    return CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height - 100);
-//}
 
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button {
     NSLog(@"Retry button tapped");
@@ -195,8 +203,27 @@
     stateView.titleLabel.tag = 10;
     [self.tableView zl_reloadStateView];
 }
+- (BOOL)zl_stateViewScrollEnabled:(ZLStateView *)stateView {
+    return NO;
+}
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView {
     return self.tableView;
+}
+
+- (BOOL)zl_useCustomViewInStateView:(ZLStateView *)stateView {
+    return self.useCustomView;
+}
+- (UIView *)zl_customViewForStateView:(ZLStateView *)stateView {
+    UILabel *label = UILabel.new;
+    label.backgroundColor = UIColor.orangeColor;
+    label.text = @"这是一个自定义view";
+    label.font = [UIFont boldSystemFontOfSize:38];
+    label.numberOfLines = 0;
+    label.textColor = UIColor.whiteColor;
+    label.frame = CGRectMake(0, 0, 200, 50);
+    label.center = CGPointMake(100, 100);
+    label.textAlignment = NSTextAlignmentCenter;
+    return label;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.sections;
