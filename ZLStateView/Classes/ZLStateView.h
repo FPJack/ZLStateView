@@ -28,6 +28,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL )zl_buttonShouldDisplayInStateView:(ZLStateView *)stateView;
 ///是否需要展示状态视图，默认是NO,(UITableView,UICollectionView内部会自动判断数据源是否为空)
 - (BOOL )zl_stateViewShouldDisplay;
+/// 是否需要淡入效果，默认是YES
+- (BOOL)zl_stateViewShouldFadeIn:(ZLStateView *)stateView;
+
 
 /// 初始化stateView
 - (void)zl_initializeStateView:(ZLStateView *)stateView;

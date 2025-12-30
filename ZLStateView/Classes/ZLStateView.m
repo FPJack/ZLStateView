@@ -257,7 +257,24 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         return;
     }
     
+    if (!stateView.superview) {
+        void(^animationBK)(void) = ^(void) {
+            stateView.alpha = 0.0;
+            [UIView animateWithDuration:0.25 animations:^{
+                stateView.alpha = 1.0;
+            }];
+        };
+        if ([self.zl_stateViewDelegate respondsToSelector:@selector(zl_stateViewShouldFadeIn:)]) {
+            BOOL shouldFadeIn = [self.zl_stateViewDelegate zl_stateViewShouldFadeIn:stateView];
+            if (shouldFadeIn) {
+                animationBK();
+            }
+        }else {
+            animationBK();
+        }
+    }
     [superview addSubview:stateView];
+    
     [self zl_setUI:stateView];
 }
 - (void)zl_setUI:(ZLStateView *)stateView {
