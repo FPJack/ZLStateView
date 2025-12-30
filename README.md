@@ -12,6 +12,23 @@ UITableView,UICollectionView 一行代码集成数据空白状态视图
 ```ruby
     self.tableView.zl_stateViewDelegate = self;
 ```
+状态视图默认的三种状态，可以自行定义更多状态
+```ruby
+
+    FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoNetwork;
+    FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusError;
+    FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
+    
+    // 设置状态视图状态，再刷新，协议方法根据状态值展示相对应的视图
+    self.tableView.zl_stateViewStatus = ZLStateViewStatusNoData;
+    [self.tableView zl_reloadStateView];
+
+```
+
+手动刷新状态视图
+```ruby
+    [self.tableView zl_reloadStateView];
+```
 
 自定义配置状态视图的协议方法
 
