@@ -8,6 +8,7 @@
 
 #import "ZLViewController.h"
 #import <ZLStateView/ZLStateView.h>
+#import <ZLPopView/ZLPopView.h>
 @interface ZLViewController ()<IZLStateViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property (nonatomic, assign)BOOL display;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -34,6 +35,51 @@
             [self.tableView  reloadData];
         });
     });
+    ///导航栏添加右侧按钮
+    ///
+    UIButton *btn = UIButton.new;
+    [btn setTitleColor:UIColor.orangeColor forState:UIControlStateNormal];
+    [btn setTitle:@"切换" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(toggleDisplay:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+    
+    
+  
+}
+- (void)toggleDisplay:(UIButton *)sender {
+    
+    
+    kPopViewColumnBuilder
+        .tapMaskDismiss
+        .space(10)
+        .inset(10, 10, 10, 10)
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"空白页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.tableView.zl_stateViewStatus = ZLStateViewStatusNoData;
+                [self.tableView zl_reloadStateView];
+            });
+        })
+    
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"无网络页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.tableView.zl_stateViewStatus = ZLStateViewStatusNoNetwork;
+                [self.tableView zl_reloadStateView];
+
+            });
+        })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"错误页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.tableView.zl_stateViewStatus = ZLStateViewStatusError;
+                [self.tableView zl_reloadStateView];
+            });
+        })
+        
+        .buildPopOverView
+        .setFromView(sender)
+        .setDirection(ZLPopOverDirectionUp)
+        .showPopView();
+    
+    
 }
 //- (BOOL)zl_stateViewShouldDisplay {
 //    return self.display ;
@@ -45,7 +91,15 @@
 //    return 30;
 //}
 - (void)zl_configureTitleLabel:(UILabel *)titleLabel inStateView:(ZLStateView *)stateView {
-    titleLabel.text = @"No Data Available";
+    NSString *title = @"";
+    if ([stateView.status isEqualToString:ZLStateViewStatusNoNetwork]) {
+        title = @"No Network Connection";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusError]) {
+        title = @"An Error Occurred";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusNoData]) {
+        title = @"No Data Available";
+    }
+    titleLabel.text = title;
 }
 //- (CGFloat)zl_spacingAfterTitleLabelInStateView:(ZLStateView *)stateView {
 //    return 50;

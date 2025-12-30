@@ -5,17 +5,20 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.4)
   - FBSnapshotTestCase/SwiftSupport (2.1.4):
     - FBSnapshotTestCase/Core
+  - ZLPopView (0.1.2)
   - ZLStateView (0.1.0)
 
 DEPENDENCIES:
   - DZNEmptyDataSet
   - FBSnapshotTestCase
+  - ZLPopView
   - ZLStateView (from `../`)
 
 SPEC REPOS:
   trunk:
     - DZNEmptyDataSet
     - FBSnapshotTestCase
+    - ZLPopView
 
 EXTERNAL SOURCES:
   ZLStateView:
@@ -24,8 +27,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  ZLPopView: 74bc4ee499f9442ff67b4718262a5be79b039e74
   ZLStateView: beb999afe2d6532555b237355351205382684e6c
 
-PODFILE CHECKSUM: 8b239e4be18a463c4dec7cde00d9663ae483ae0f
+PODFILE CHECKSUM: 7249843c86a90e8e35275404c9a658958551fef2
 
 COCOAPODS: 1.16.2
