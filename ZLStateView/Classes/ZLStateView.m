@@ -466,21 +466,15 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         [self _zl_hook_swizzleInstanceMethod:@selector(reloadData) with:@selector(zl_hook_reloadData)];
-        [self _zl_hook_swizzleInstanceMethod:@selector(endUpdates) with:@selector(zl_hook_endUpdates)];
-
     });
 }
 - (void)zl_hook_reloadData{
-    
     [self zl_hook_reloadData];
     if (self.zl_stateViewdelegate) {
         self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInTableView:self];
         [self zl_reloadStateView];
         self.zl_stateView.numberOfSections = 0;
     }
-}
-- (void)zl_hook_endUpdates{
-    [self zl_hook_endUpdates];
 }
 @end
 @implementation UICollectionView (ZLStateView)
@@ -491,7 +485,6 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     });
 }
 - (void)zl_hook_reloadData{
-    
     [self zl_hook_reloadData];
     if (self.zl_stateViewdelegate) {
         self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInCollectionView:self];
