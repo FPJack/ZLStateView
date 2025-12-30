@@ -14,56 +14,66 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol IZLStateViewDelegate <NSObject>
 @optional
 
-/// Reload data of state view
+/// 刷新空白视图的时候调用
 - (void)zl_reloadStateView:(ZLStateView *)stateView;
 
-///default is NO
+///是否需要展示ImageView，默认是YES
 - (BOOL )zl_imageViewShouldDisplayInStateView:(ZLStateView *)stateView;
 
-///defalut is YES
+///是否需要展示TitleLabel，默认是YES
 - (BOOL )zl_titleLabelShouldDisplayInStateView:(ZLStateView *)stateView;
-///defalut is NO
+///是否需要展示DetailLabel，默认是NO
 - (BOOL )zl_detailLabelShouldDisplayInStateView:(ZLStateView *)stateView;
-///default is NO
+///是否需要展示Button，默认是NO
 - (BOOL )zl_buttonShouldDisplayInStateView:(ZLStateView *)stateView;
-///default is NO
+///是否需要展示状态视图，默认是NO,(UITableView,UICollectionView内部会自动判断数据源是否为空)
 - (BOOL )zl_stateViewShouldDisplay;
 
-/// Initialize views
+/// 初始化stateView
 - (void)zl_initializeStateView:(ZLStateView *)stateView;
+///初始化TitleLabel
 - (void)zl_initializeTitleLabel:(UILabel *)titleLabel inStateView:(ZLStateView *)stateView;
+///初始化DetailLabel
 - (void)zl_initializeDetailLabel:(UILabel *)detailLabel inStateView:(ZLStateView *)stateView;
+///初始化ImageView
 - (void)zl_initializeImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView;
+///初始化Button
 - (void)zl_initializeButton:(UIButton *)button inStateView:(ZLStateView *)stateView;
 
-/// Configure views
+/// 配置TitleLabel
 - (void)zl_configureTitleLabel:(UILabel *)titleLabel inStateView:(ZLStateView *)stateView;
+/// 配置DetailLabel
 - (void)zl_configureDetailLabel:(UILabel *)detailLabel inStateView:(ZLStateView *)stateView;
+/// 配置ImageView
 - (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView;
+/// 配置Button
 - (void)zl_configureButton:(UIButton *)button inStateView:(ZLStateView *)stateView;
 
-/// Spacing between views
+///TitleLabel 后面的间距
 - (CGFloat)zl_spacingAfterTitleLabelInStateView:(ZLStateView *)stateView;
+///DetailLabel 后面的间距
 - (CGFloat)zl_spacingAfterDetailLabelInStateView:(ZLStateView *)stateView;
+///ImageView 后面的间距
 - (CGFloat)zl_spacingAfterImageViewInStateView:(ZLStateView *)stateView;
+///Button 后面的间距
 - (CGFloat)zl_spacingAfterButtonInStateView:(ZLStateView *)stateView;
 
-/// Vertical offset of the entire state view
+/// 垂直偏移量
 - (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView;
 
-/// Use custom view
+/// 是否使用自定义视图，返回YES则走自定义视图代理方法
 - (BOOL)zl_useCustomViewInStateView:(ZLStateView *)stateView;
-/// Custom view
+/// 自定义视图
 - (UIView *)zl_customViewForStateView:(ZLStateView *)stateView;
 
 /// Super view to add state view,控制器默认添加到self.view，视图默认添加到自身视图的父视图
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView;
 
-/// Frame for state view
+/// stateView的frame，默认中心布局，高度自适应，宽度等于父视图宽度
 - (CGRect)zl_frameForStateView:(ZLStateView *)stateView;
-/// Insets for state view
+/// stateView的内边距，默认UIEdgeInsets(20,20,20,20)
 - (UIEdgeInsets)zl_insetsForStateView:(ZLStateView *)stateView;
-/// Button tap action
+/// 按钮点击事件
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button;
 ///如果是scrollview是否可以允许滑动
 - (BOOL)zl_stateViewScrollEnabled:(ZLStateView *)stateView;

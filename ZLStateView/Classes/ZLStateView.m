@@ -205,7 +205,13 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     objc_setAssociatedObject(self, @selector(zl_stateViewStatus), zl_stateViewStatus, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 - (void)zl_reloadStateView {
-    if (self.zl_stateViewDelegate == nil || ![self zl_zl_stateViewShouldDisplay]) {
+    
+    if (!self.zl_stateViewDelegate) {
+        [self.zl_stateView removeFromSuperview];
+        return;
+    }
+    
+    if (![self zl_zl_stateViewShouldDisplay]) {
         [self.zl_stateView removeFromSuperview];
         if ([self isKindOfClass:UIScrollView.class]) {
             UIScrollView *scrollView = (UIScrollView *)self;
