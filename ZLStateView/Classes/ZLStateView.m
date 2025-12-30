@@ -57,6 +57,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         _titleLabel.font = [UIFont systemFontOfSize:16];
         _titleLabel.textColor = [UIColor darkTextColor];
         _titleLabel.numberOfLines = 0;
+        _titleLabel.text = @"无数据";
         _titleLabel.tag = 11;
     }
     return _titleLabel;
@@ -69,6 +70,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         _detailLabel.textColor = [UIColor lightGrayColor];
         _detailLabel.numberOfLines = 0;
         _detailLabel.tag = 12;
+        _detailLabel.text = @"暂无数据，请稍后再试";
 
     }
     return _detailLabel;
@@ -83,6 +85,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         _button.layer.borderWidth = 1;
         _button.layer.borderColor = [UIColor systemBlueColor].CGColor;
         _button.backgroundColor = [UIColor clearColor];
+        [_button setTitle:@"重试" forState:UIControlStateNormal];
         _button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         _button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         _button.tag = 13;
