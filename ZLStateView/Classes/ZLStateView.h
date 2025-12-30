@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// Reload data of state view
 - (void)zl_reloadStateView:(ZLStateView *)stateView;
 
-///default is YES
+///default is NO
 - (BOOL )zl_imageViewShouldDisplayInStateView:(ZLStateView *)stateView;
 
 ///defalut is YES
