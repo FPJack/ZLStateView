@@ -189,7 +189,7 @@
     [button.widthAnchor constraintEqualToConstant:100].active = YES;
 }
 - (void)zl_configureButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
-    [button setTitle:@"Retry" forState:UIControlStateNormal];
+    [button setTitle:@"重试" forState:UIControlStateNormal];
 }
 - (CGFloat)zl_spacingAfterButtonInStateView:(ZLStateView *)stateView {
     return 20;
@@ -201,9 +201,10 @@
 
 - (void)zl_stateView:(ZLStateView *)stateView didTapButton:(UIButton *)button {
     NSLog(@"Retry button tapped");
-    stateView.imageView.tag = 11;
-    stateView.titleLabel.tag = 10;
-    [self.tableView zl_reloadStateView];
+    kPopViewColumnBuilder
+        .title(@"点击了重试按钮")
+        .addConfirmViewStyleActionText(@"确认", nil)
+        .showAlert();
 }
 - (BOOL)zl_stateViewScrollEnabled:(ZLStateView *)stateView {
     return NO;
