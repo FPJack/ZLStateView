@@ -26,7 +26,6 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 
 @property (nonatomic,strong)NSLayoutConstraint *stackcviewCenterYConstraint;
 
-@property (nonatomic,assign)NSInteger numberOfSections;
 @property (nonatomic, copy,readwrite) ZLStateViewStatus status;
 
 
@@ -344,7 +343,15 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
             display = [self.zl_stateViewdelegate zl_stateViewShouldDisplay];
         }else {
             if ([self isKindOfClass:UITableView.class] || [self isKindOfClass:UICollectionView.class]) {
-                display = self.zl_stateView.numberOfSections <= 0;
+                NSInteger numberOfSections = 0;
+                if ([self isKindOfClass:UITableView.class]) {
+                    UITableView *tableView = (UITableView *)self;
+                    numberOfSections = [tableView.dataSource numberOfSectionsInTableView:tableView];
+                }else {
+                    UICollectionView *collectionView = (UICollectionView *)self;
+                    numberOfSections = [collectionView.dataSource numberOfSectionsInCollectionView:collectionView];
+                }
+                display = numberOfSections <= 0;
             }
         }
     }
@@ -500,9 +507,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 - (void)zl_hook_reloadData{
     [self zl_hook_reloadData];
     if (self.zl_stateViewdelegate) {
-        self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInTableView:self];
         [self zl_reloadStateView];
-        self.zl_stateView.numberOfSections = 0;
     }
 }
 @end
@@ -516,9 +521,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 - (void)zl_hook_reloadData{
     [self zl_hook_reloadData];
     if (self.zl_stateViewdelegate) {
-        self.zl_stateView.numberOfSections = [self.dataSource numberOfSectionsInCollectionView:self];
         [self zl_reloadStateView];
-        self.zl_stateView.numberOfSections = 0;
     }
 }
 @end

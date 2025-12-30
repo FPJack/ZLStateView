@@ -6,6 +6,7 @@ target 'ZLStateView_Example' do
   pod 'ZLStateView', :path => '../'
   pod 'DZNEmptyDataSet'
   pod 'ZLPopView'
+  pod 'FPRefresh'
 
   target 'ZLStateView_Tests' do
     inherit! :search_paths

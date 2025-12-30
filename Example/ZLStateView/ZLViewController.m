@@ -9,6 +9,7 @@
 #import "ZLViewController.h"
 #import <ZLStateView/ZLStateView.h>
 #import <ZLPopView/ZLPopView.h>
+#import <FPRefresh/UIScrollView+Refresh.h>
 @interface ZLViewController ()<IZLStateViewDelegate,UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,assign)NSInteger sections;
@@ -26,7 +27,16 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
     self.tableView.zl_stateViewdelegate = self;
-      
+//    self.tableView.headerCanRefresh = YES;
+//    self.tableView.refreshBlock = ^(RefreshType type) {
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+//            self.sections = 5;
+//            [self.tableView reloadData];
+//            [self.tableView end_Refresh];
+//        });
+//    };
+//    [self.tableView begin_Refreshing];
+//      
     ///导航栏添加右侧按钮
     ///
     UIButton *btn = UIButton.new;
@@ -35,14 +45,6 @@
     [btn addTarget:self action:@selector(toggleDisplay:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.sections = 10;
-        [self.tableView reloadData];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            self.sections = 0;
-            [self.tableView reloadData];
-        });
-    });
   
 }
 - (void)toggleDisplay:(UIButton *)sender {
