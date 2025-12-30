@@ -27,10 +27,14 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 @property (nonatomic,strong)NSLayoutConstraint *stackcviewCenterYConstraint;
 
 @property (nonatomic,assign)NSInteger numberOfSections;
+@property (nonatomic, copy,readwrite) ZLStateViewStatus status;
 
 
 @end
 @implementation ZLStateView
+- (ZLStateViewStatus)zl_stateViewStatus {
+    return self.status;
+}
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -195,7 +199,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     return objc_getAssociatedObject(self, @selector(zl_stateViewStatus));
 }
 - (void)setZl_stateViewStatus:(ZLStateViewStatus)zl_stateViewStatus {
-//    self.zl_stateViewStatus = zl_stateViewStatus;
+    self.zl_stateView.status = zl_stateViewStatus;
     objc_setAssociatedObject(self, @selector(zl_stateViewStatus), zl_stateViewStatus, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 - (void)zl_reloadStateView {
@@ -218,7 +222,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     }
    
     ZLStateView *stateView = self.zl_stateView;
-    stateView.status = self.zl_stateViewStatus;
+//    stateView.status = self.zl_stateViewStatus;
     
     if ([self.zl_stateViewdelegate respondsToSelector:@selector(zl_reloadStateView:)]) {
         [self.zl_stateViewdelegate zl_reloadStateView:stateView];

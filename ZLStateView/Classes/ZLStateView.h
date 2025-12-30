@@ -86,7 +86,7 @@ FOUNDATION_EXPORT ZLStateViewStatus const ZLStateViewStatusNoData;
 ///
 @property (nonatomic, strong, nullable,readonly) UIView *customView;
 ///default is ZLStateViewStatusNoData
-@property (nonatomic, copy) ZLStateViewStatus status;
+@property (nonatomic, copy,readonly) ZLStateViewStatus status;
 
 @end
 

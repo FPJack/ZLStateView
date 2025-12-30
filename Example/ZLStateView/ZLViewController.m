@@ -10,9 +10,10 @@
 #import <ZLStateView/ZLStateView.h>
 #import <ZLPopView/ZLPopView.h>
 @interface ZLViewController ()<IZLStateViewDelegate,UITableViewDataSource,UITableViewDelegate>
-@property (nonatomic, assign)BOOL display;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic,assign)NSInteger sections;
+@property (nonatomic,assign)CGFloat verticalOffset;
+@property (nonatomic, strong) NSMutableArray *sortTags;
 @end
 
 @implementation ZLViewController
@@ -24,7 +25,6 @@
     self.tableView.dataSource = self;
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
     self.tableView.zl_stateViewdelegate = self;
-    self.display = YES;
     
     [self.tableView zl_reloadStateView];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -73,6 +73,30 @@
                 [self.tableView zl_reloadStateView];
             });
         })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"垂直偏移100").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.verticalOffset = 100;
+                [self.tableView zl_reloadStateView];
+            });
+        })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"垂直偏移-100").addTapAction(^(__kindof UIView * _Nonnull view) {
+                self.verticalOffset = -100;
+                [self.tableView zl_reloadStateView];
+            });
+        })
+        .addViewBK(^ViewKFCType  _Nonnull{
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"随机调整位置").addTapAction(^(__kindof UIView * _Nonnull view) {
+                NSArray *sortTags = @[@10,@11,@12,@13];
+                // 随机打乱数组
+                NSArray *shuffledArray = [sortTags sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                    return arc4random_uniform(2) ? NSOrderedAscending : NSOrderedDescending;
+                }];
+                self.sortTags = [NSMutableArray arrayWithArray:shuffledArray];
+               
+                [self.tableView zl_reloadStateView];
+            });
+        })
         
         .buildPopOverView
         .setFromView(sender)
@@ -81,50 +105,86 @@
     
     
 }
-//- (BOOL)zl_stateViewShouldDisplay {
-//    return self.display ;
-//}
-- (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView {
-    imageView.image = [UIImage imageNamed:@"placeholder_appstore"];
+
+- (void)zl_reloadStateView:(ZLStateView *)stateView {
+    if (self.sortTags.count == 4) {
+        stateView.imageView.tag = [self.sortTags[0] integerValue];
+        stateView.titleLabel.tag = [self.sortTags[1] integerValue];
+        stateView.detailLabel.tag = [self.sortTags[2] integerValue];
+        stateView.button.tag = [self.sortTags[3] integerValue];
+    }
 }
-//- (CGFloat)zl_spacingAfterImageViewInStateView:(ZLStateView *)stateView {
-//    return 30;
-//}
+
+- (BOOL)zl_imageViewShouldDisplayInStateView:(ZLStateView *)stateView {
+    return YES;
+}
+- (void)zl_configureImageView:(UIImageView *)imageView inStateView:(ZLStateView *)stateView {
+    NSString *imageName = @"";
+    if ([stateView.status isEqualToString:ZLStateViewStatusNoNetwork]) {
+        imageName = @"placeholder_remote";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusError]) {
+        imageName = @"placeholder_dropbox";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusNoData]) {
+        imageName = @"placeholder_appstore";
+    }
+    imageView.image = [UIImage imageNamed:imageName];
+}
+- (CGFloat)zl_spacingAfterImageViewInStateView:(ZLStateView *)stateView {
+    return 10;
+}
+
+
+- (BOOL)zl_titleLabelShouldDisplayInStateView:(ZLStateView *)stateView {
+    return YES;
+}
 - (void)zl_configureTitleLabel:(UILabel *)titleLabel inStateView:(ZLStateView *)stateView {
     NSString *title = @"";
     if ([stateView.status isEqualToString:ZLStateViewStatusNoNetwork]) {
-        title = @"No Network Connection";
+        title = @"无网络";
     }else if ([stateView.status isEqualToString:ZLStateViewStatusError]) {
-        title = @"An Error Occurred";
+        title = @"发生错误";
     }else if ([stateView.status isEqualToString:ZLStateViewStatusNoData]) {
-        title = @"No Data Available";
+        title = @"无数据";
     }
     titleLabel.text = title;
 }
-//- (CGFloat)zl_spacingAfterTitleLabelInStateView:(ZLStateView *)stateView {
-//    return 50;
-//}
-- (void)zl_initializeButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
-    [button.widthAnchor constraintEqualToConstant:100].active = YES;
+- (CGFloat)zl_spacingAfterTitleLabelInStateView:(ZLStateView *)stateView {
+    return 15;
 }
 - (BOOL)zl_detailLabelShouldDisplayInStateView:(ZLStateView *)stateView {
-    return self.display;
-}
-//- (CGFloat)zl_spacingAfterDetailLabelInStateView:(ZLStateView *)stateView {
-//    return 70;
-//}
-- (BOOL)zl_buttonShouldDisplayInStateView:(ZLStateView *)stateView {
-    return self.display;
+    return YES;
 }
 - (void)zl_configureDetailLabel:(UILabel *)detailLabel inStateView:(ZLStateView *)stateView {
-    detailLabel.text = @"Please check back later.";
+    NSString *title = @"";
+    if ([stateView.status isEqualToString:ZLStateViewStatusNoNetwork]) {
+        title = @"检查您的网络连接";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusError]) {
+        title = @"发生错误，请稍后重试";
+    }else if ([stateView.status isEqualToString:ZLStateViewStatusNoData]) {
+        title = @"暂无数据，请稍后再试";
+    }
+    detailLabel.text = title;
+}
+- (CGFloat)zl_spacingAfterDetailLabelInStateView:(ZLStateView *)stateView {
+    return 20;
+}
+
+- (BOOL)zl_buttonShouldDisplayInStateView:(ZLStateView *)stateView {
+    return YES;
+}
+- (void)zl_initializeButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
+    [button.widthAnchor constraintEqualToConstant:100].active = YES;
 }
 - (void)zl_configureButton:(UIButton *)button inStateView:(ZLStateView *)stateView {
     [button setTitle:@"Retry" forState:UIControlStateNormal];
 }
-//- (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView {
-//    return 100;
-//}
+- (CGFloat)zl_spacingAfterButtonInStateView:(ZLStateView *)stateView {
+    return 20;
+}
+
+- (CGFloat)zl_verticalOffsetInStateView:(ZLStateView *)stateView {
+    return self.verticalOffset;
+}
 //- (CGRect)zl_frameForStateView:(ZLStateView *)stateView {
 //    return CGRectMake(0, 100, self.view.bounds.size.width, self.view.bounds.size.height - 100);
 //}
