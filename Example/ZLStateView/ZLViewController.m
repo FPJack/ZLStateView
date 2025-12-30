@@ -55,21 +55,21 @@
         .space(10)
         .inset(10, 10, 10, 10)
         .addViewBK(^ViewKFCType  _Nonnull{
-            return  UILabel.kfc.dismissPopViewWhenTap.text(@"空白页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"切换空白页面").addTapAction(^(__kindof UIView * _Nonnull view) {
                 self.tableView.zl_stateViewStatus = ZLStateViewStatusNoData;
                 [self.tableView zl_reloadStateView];
             });
         })
     
         .addViewBK(^ViewKFCType  _Nonnull{
-            return  UILabel.kfc.dismissPopViewWhenTap.text(@"无网络页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"切换无网络页面").addTapAction(^(__kindof UIView * _Nonnull view) {
                 self.tableView.zl_stateViewStatus = ZLStateViewStatusNoNetwork;
                 [self.tableView zl_reloadStateView];
 
             });
         })
         .addViewBK(^ViewKFCType  _Nonnull{
-            return  UILabel.kfc.dismissPopViewWhenTap.text(@"错误页面").addTapAction(^(__kindof UIView * _Nonnull view) {
+            return  UILabel.kfc.dismissPopViewWhenTap.text(@"切换错误页面").addTapAction(^(__kindof UIView * _Nonnull view) {
                 self.tableView.zl_stateViewStatus = ZLStateViewStatusError;
                 [self.tableView zl_reloadStateView];
             });
