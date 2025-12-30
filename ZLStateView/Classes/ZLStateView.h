@@ -66,7 +66,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// 自定义视图
 - (UIView *)zl_customViewForStateView:(ZLStateView *)stateView;
 
-/// Super view to add state view,控制器默认添加到self.view，视图默认添加到自身视图的父视图
+/// Super view to add state view,控制器默认添加到self.view，如果是View默认添加到自身身上
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView;
 
 /// stateView的frame，默认中心布局，高度自适应，宽度等于父视图宽度

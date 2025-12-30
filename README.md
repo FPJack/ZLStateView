@@ -1,6 +1,6 @@
 # ZLStateView
 
-
+ios 快捷方便实现无数据，无网络，发生错误页面等自定义状态View，UITableView，UICollectionView一行代码集成空白页面
 <img src="https://github.com/FPJack/ZLStateView/blob/master/test.GIF" width="50%" height="30%">
 
 ```ruby
@@ -87,7 +87,7 @@ UITableView,UICollectionView 一行代码集成数据空白状态视图
 /// 自定义视图
 - (UIView *)zl_customViewForStateView:(ZLStateView *)stateView;
 
-/// Super view to add state view,控制器默认添加到self.view，视图默认添加到自身视图的父视图
+/// Super view to add state view,控制器默认添加到self.view，如果是View默认添加到自身身上
 - (UIView *)zl_superViewForStateView:(ZLStateView *)stateView;
 
 /// stateView的frame，默认中心布局，高度自适应，宽度等于父视图宽度
