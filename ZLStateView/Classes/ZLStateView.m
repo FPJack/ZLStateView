@@ -198,7 +198,10 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
     objc_setAssociatedObject(self, @selector(zl_stateViewStatus), zl_stateViewStatus, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 - (void)zl_reloadStateView {
-    
+    if (self.zl_stateViewdelegate == nil) {
+        [self.zl_stateView removeFromSuperview];
+        return;
+    }
     if ([self zl_zl_stateViewShouldDisplay] == NO) {
         [self.zl_stateView removeFromSuperview];
         return;
