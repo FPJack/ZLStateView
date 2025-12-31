@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol IZLStateViewDelegate <NSObject>
 @optional
 
-/// 刷新空白视图的时候调用
+/// 刷新空白视图的时候调用,第一次realod的时候stateView还未创建，stateView为nil
 - (void)zl_reloadStateView:(ZLStateView *)stateView;
 
 ///是否需要展示ImageView，默认是YES

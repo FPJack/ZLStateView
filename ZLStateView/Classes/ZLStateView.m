@@ -211,6 +211,10 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
         return;
     }
     
+    if ([self.zl_stateViewDelegate respondsToSelector:@selector(zl_reloadStateView:)]) {
+        [self.zl_stateViewDelegate zl_reloadStateView:self.zl_stateView];
+    }
+    
     if (![self zl_zl_stateViewShouldDisplay]) {
         [self.zl_stateView removeFromSuperview];
         if ([self isKindOfClass:UIScrollView.class]) {
@@ -231,9 +235,7 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
    
     ZLStateView *stateView = self.zl_stateView;
     
-    if ([self.zl_stateViewDelegate respondsToSelector:@selector(zl_reloadStateView:)]) {
-        [self.zl_stateViewDelegate zl_reloadStateView:stateView];
-    }
+   
     
     if ([self.zl_stateViewDelegate respondsToSelector:@selector(zl_superViewForStateView:)]) {
         superview = [self.zl_stateViewDelegate zl_superViewForStateView:stateView];
