@@ -191,6 +191,12 @@ ZLStateViewStatus const ZLStateViewStatusNoData        = @"ZLStateViewStatusNoDa
 }
 - (void)setZl_stateViewDelegate:(id<IZLStateViewDelegate>)zl_stateViewDelegate {
     ZLWeakObjectContainer *container = [[ZLWeakObjectContainer alloc] initWithWeakObject:zl_stateViewDelegate];
+    if (self.zl_stateViewDelegate &&
+        zl_stateViewDelegate &&
+        ![self.zl_stateViewDelegate isEqual:zl_stateViewDelegate]) {
+        [self.zl_stateView removeFromSuperview];
+        self.zl_stateView = nil;
+    }
     objc_setAssociatedObject(self, @selector(zl_stateViewDelegate), container, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (id<IZLStateViewDelegate>)zl_stateViewDelegate {

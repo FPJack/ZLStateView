@@ -7,6 +7,7 @@ target 'ZLStateView_Example' do
   pod 'DZNEmptyDataSet'
   pod 'ZLPopView'
   pod 'FPRefresh'
+#  pod "PromiseKit", "~> 8"
 
   target 'ZLStateView_Tests' do
     inherit! :search_paths

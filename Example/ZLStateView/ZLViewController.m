@@ -44,6 +44,7 @@
     [btn setTitle:@"切换" forState:UIControlStateNormal];
     [btn addTarget:self action:@selector(toggleDisplay:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:btn];
+  
     
   
 }

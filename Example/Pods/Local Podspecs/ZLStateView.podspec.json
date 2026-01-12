@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "summary": "A short description of ZLStateView.",
   "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/fanpeng/ZLStateView",
+  "homepage": "https://github.com/FPJack/ZLStateView.git",
   "license": {
     "type": "MIT",
     "file": "LICENSE"
@@ -12,7 +12,7 @@
     "fanpeng": "2551412939@qq.com"
   },
   "source": {
-    "git": "https://github.com/fanpeng/ZLStateView.git",
+    "git": "https://github.com/FPJack/ZLStateView.git",
     "tag": "0.1.0"
   },
   "platforms": {
