@@ -8,6 +8,8 @@ ios 快捷方便实现无数据，无网络，发生错误页面等自定义状�
 
 
 ```ruby
+//同时支持SPM导入和CocoaPods导入
+
 pod 'ZLStateView'
 ```
 
